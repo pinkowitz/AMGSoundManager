@@ -295,5 +295,29 @@ static AMGSoundManager *_sharedManager;
     }
 }
 
+- (void)setOn:(BOOL)on {
+  _on = on;
+  NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+  [userDefaults setObject:[NSNumber numberWithBool:on]
+                   forKey:kAMGSystemSoundPlayerUserDefaultsKey];
+  [userDefaults synchronize];
+
+  if (!on) {
+    [self stopAllAudios];
+  }
+}
+
+- (BOOL)readSoundPlayerOnFromUserDefaults {
+  NSNumber *setting = [[NSUserDefaults standardUserDefaults]
+      objectForKey:kAMGSystemSoundPlayerUserDefaultsKey];
+
+  if (!setting) {
+    self.on = YES;
+    return YES;
+  }
+
+  return [setting boolValue];
+}
+
 
 @end
