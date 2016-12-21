@@ -60,7 +60,7 @@ static AMGSoundManager *_sharedManager;
 }
 
 -(BOOL)playAudio:(id)audioPathOrData withName:(NSString *)name inLine:(NSString *)line withVolume:(float)volume andRepeatCount:(int)repeatCount fadeDuration:(CGFloat)fadeDuration withCompletitionHandler:(void (^)(BOOL success, BOOL stopped))handler{
-    if(!audioPathOrData !_on)
+    if(!audioPathOrData || !_on)
         return NO;
     if(!line)
         line = kAMGSoundManagerDefaultLine;
@@ -313,7 +313,7 @@ static AMGSoundManager *_sharedManager;
   [userDefaults synchronize];
 
   if (!on) {
-    [self stopAllAudios];
+    [self stopAudiosInLine:nil andAlsoWithName:nil andAlsoWithPath:nil withFadeDuration:0.0];
   }
 }
 
