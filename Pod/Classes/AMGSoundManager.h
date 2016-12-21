@@ -17,6 +17,7 @@
 
 @property(nonatomic,retain) NSMutableDictionary *sounds;
 @property(nonatomic,weak) id<AMGSoundManagerDelegate> delegate;
+@property (nonatomic, assign) BOOL on;
 
 +(AMGSoundManager*)sharedManager;
 
