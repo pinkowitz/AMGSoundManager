@@ -9,6 +9,7 @@
 #import "AMGSoundManager.h"
 #import "AMGAudioPlayer.h"
 
+#define kAMGSystemSoundPlayerUserDefaultsKey @"kAMGSystemSoundPlayerUserDefaultsKey"
 #define kAMGVolumeChangesPerSecond 15
 
 #define kAMGSoundManagerKeyName @"name"
@@ -35,22 +36,31 @@ static AMGSoundManager *_sharedManager;
     
 }
 
-
+- (instancetype)init {
+    self = [super init];
+    if(self) {
+        _on = [self readSoundPlayerOnFromUserDefaults];
+    }
+    return self;
+}
 
 -(BOOL)playAudio:(id)audioPathOrData withCompletitionHandler:(void (^)(BOOL success, BOOL stopped))handler{
+    if (!_on) return NO;
     return [self playAudio:audioPathOrData withName:nil inLine:kAMGSoundManagerDefaultLine withVolume:1.0 andRepeatCount:0 fadeDuration:0.0 withCompletitionHandler:handler];
 }
 
 -(BOOL)playAudio:(id)audioPathOrData withName:(NSString *)name withCompletitionHandler:(void (^)(BOOL success, BOOL stopped))handler{
+    if (!_on) return NO;
     return [self playAudio:audioPathOrData withName:name inLine:kAMGSoundManagerDefaultLine withVolume:1.0 andRepeatCount:0 fadeDuration:0.0 withCompletitionHandler:handler];
 }
 
 -(BOOL)playAudio:(id)audioPathOrData withName:(NSString *)name inLine:(NSString *)line withCompletitionHandler:(void (^)(BOOL success, BOOL stopped))handler{
+    if (!_on) return NO;
     return [self playAudio:audioPathOrData withName:name inLine:line withVolume:1.0 andRepeatCount:0 fadeDuration:0.0 withCompletitionHandler:handler];
 }
 
 -(BOOL)playAudio:(id)audioPathOrData withName:(NSString *)name inLine:(NSString *)line withVolume:(float)volume andRepeatCount:(int)repeatCount fadeDuration:(CGFloat)fadeDuration withCompletitionHandler:(void (^)(BOOL success, BOOL stopped))handler{
-    if(!audioPathOrData)
+    if(!audioPathOrData !_on)
         return NO;
     if(!line)
         line = kAMGSoundManagerDefaultLine;
